@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🎉 Happy Birthday Aron! 🎉</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      width: 100%; height: 100%;
+      overflow: hidden;
+      font-family: "Segoe UI", "Comic Sans MS", cursive, sans-serif;
+    }
+    body {
+      background: #0a0a1a url("aron-all.png") center center / contain no-repeat;
+      position: relative;
+    }
+    #confetti-canvas {
+      position: fixed; top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      pointer-events: none; z-index: 999;
+    }
+
+
+    .side-panel {
+      position: fixed; top: 50%; transform: translateY(-50%);
+      display: flex; flex-direction: column; gap: 14px; z-index: 50;
+    }
+    #left-panel  { left: 18px; }
+    #right-panel { right: 18px; }
+    .btn {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 6px;
+      border: none; cursor: pointer; border-radius: 18px;
+      font-weight: 800; font-family: inherit;
+      transition: transform 0.15s, box-shadow 0.15s;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+      color: #fff; outline: none; padding: 14px 18px;
+      min-width: 100px; text-align: center;
+    }
+    .btn:hover  { transform: scale(1.08) rotate(-2deg); box-shadow: 0 10px 30px rgba(0,0,0,0.45); }
+    .btn:active { transform: scale(0.95); }
+    #btn-video {
+      background: linear-gradient(145deg, #ff4757, #ff6348);
+      border-radius: 22px;
+      animation: pulse 2s infinite;
+    }
+    #btn-video .btn-icon  { font-size: 2.4rem; }
+    #btn-video .btn-label { font-size: 0.85rem; letter-spacing: 1px; }
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(255,71,87,0.7); }
+      50%       { box-shadow: 0 0 0 14px rgba(255,71,87,0); }
+    }
+    .btn-img .btn-icon  { font-size: 1.8rem; }
+    .btn-img .btn-label { font-size: 0.75rem; letter-spacing: 0.5px; line-height: 1.3; }
+    #btn-allyza    { background: linear-gradient(145deg, #a29bfe, #6c5ce7); }
+    #btn-angel     { background: linear-gradient(145deg, #fd79a8, #e84393); }
+    #btn-beabianca { background: linear-gradient(145deg, #00cec9, #0984e3); }
+    #btn-precious  { background: linear-gradient(145deg, #fdcb6e, #e17055); }
+    .modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.75); z-index: 500;
+      justify-content: center; align-items: center;
+      animation: fadeInOverlay 0.25s ease;
+    }
+    .modal-overlay.active { display: flex; }
+    @keyframes fadeInOverlay { from { opacity: 0; } to { opacity: 1; } }
+    .modal-box {
+      position: relative; background: #1a1a2e;
+      border-radius: 24px; padding: 12px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+      animation: popIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      max-width: 90vw; max-height: 90vh;
+    }
+    @keyframes popIn {
+      0%   { transform: scale(0.4) rotate(-5deg); opacity: 0; }
+      100% { transform: scale(1) rotate(0deg); opacity: 1; }
+    }
+    .modal-close {
+      position: absolute; top: -14px; right: -14px;
+      width: 36px; height: 36px; border-radius: 50%;
+      background: #ff4757; color: #fff; border: none;
+      font-size: 1.2rem; font-weight: 900; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5); z-index: 10;
+      transition: transform 0.2s;
+    }
+    .modal-close:hover { transform: scale(1.2) rotate(90deg); }
+    #video-modal video {
+      display: block; border-radius: 16px;
+      max-width: 80vw; max-height: 80vh;
+    }
+    #img-modal img {
+      display: block; border-radius: 16px;
+      max-width: 80vw; max-height: 78vh; object-fit: contain;
+    }
+    #img-modal-caption {
+      text-align: center; color: #ffcc00;
+      font-size: 1.1rem; font-weight: 800;
+      margin-top: 10px;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+      letter-spacing: 1px;
+    }
+    .floater {
+      position: fixed; pointer-events: none; z-index: 10;
+      animation: floatUp linear infinite; opacity: 0.8;
+    }
+    @keyframes floatUp {
+      0%   { transform: translateY(110vh) rotate(0deg); opacity: 0; }
+      10%  { opacity: 0.8; }
+      90%  { opacity: 0.8; }
+      100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="confetti-canvas"></canvas>
+
+
+
+
+  <div class="side-panel" id="left-panel">
+    <button class="btn" id="btn-video" onclick="openVideo()">
+      <span class="btn-icon">🎬</span>
+      <span class="btn-label">PLAY<br>VIDEO!</span>
+    </button>
+  </div>
+
+  <div class="side-panel" id="right-panel">
+    <button class="btn btn-img" id="btn-allyza" onclick="openImage('aronxallyza.jpg','Aron x Allyza 💜')">
+      <span class="btn-icon">📸</span>
+      <span class="btn-label">Aron &amp;<br>Allyza</span>
+    </button>
+    <button class="btn btn-img" id="btn-angel" onclick="openImage('aronxangel.jpg','Aron x Angel 💗')">
+      <span class="btn-icon">📸</span>
+      <span class="btn-label">Aron &amp;<br>Angel</span>
+    </button>
+    <button class="btn btn-img" id="btn-beabianca" onclick="openImage('aronxbeabianca.jpg','Aron x Bea Bianca 🌊')">
+      <span class="btn-icon">📸</span>
+      <span class="btn-label">Aron &amp;<br>Bea Bianca</span>
+    </button>
+    <button class="btn btn-img" id="btn-precious" onclick="openImage('aronxprecious.jpg','Aron x Precious 🧡')">
+      <span class="btn-icon">📸</span>
+      <span class="btn-label">Aron &amp;<br>Precious</span>
+    </button>
+  </div>
+
+  <div class="modal-overlay" id="video-modal">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeVideo()">&#x2715;</button>
+      <video id="video-player" controls autoplay>
+        <source src="aron1stday.mp4" type="video/mp4" />
+      </video>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="img-modal">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeImage()">&#x2715;</button>
+      <img id="img-modal-src" src="" alt="Birthday Photo" />
+      <div id="img-modal-caption"></div>
+    </div>
+  </div>
+
+  <script>
+    // ── Confetti ──────────────────────────────────────────────────
+    const canvas = document.getElementById("confetti-canvas");
+    const ctx    = canvas.getContext("2d");
+    function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+    window.addEventListener("resize", resize);
+    resize();
+
+    const COLORS = ["#ff6ec7","#ffcc00","#00e5ff","#ff4757","#7bed9f","#a29bfe","#fd79a8","#fdcb6e","#ff6b81","#54a0ff","#5f27cd","#00d2d3"];
+    const SHAPES = ["circle","square","rect","triangle"];
+
+    class Particle {
+      constructor(burst) {
+        const cx = burst ? burst.x : Math.random() * canvas.width;
+        const cy = burst ? burst.y : -10;
+        this.x = cx; this.y = cy;
+        this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
+        this.shape = SHAPES[Math.floor(Math.random() * SHAPES.length)];
+        this.size  = Math.random() * 12 + 6;
+        this.speedX = (Math.random() - 0.5) * (burst ? 10 : 4);
+        this.speedY = burst ? (Math.random() * -12 - 4) : (Math.random() * 4 + 2);
+        this.gravity = 0.25;
+        this.rotation = Math.random() * 360;
+        this.rotSpeed = (Math.random() - 0.5) * 8;
+        this.alpha = 1;
+        this.fade  = burst ? 0.015 : 0.008;
+        this.burst = !!burst;
+      }
+      update() {
+        this.x += this.speedX;
+        this.speedY += this.gravity;
+        this.y += this.speedY;
+        this.rotation += this.rotSpeed;
+        this.alpha -= this.fade;
+      }
+      draw() {
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, this.alpha);
+        ctx.fillStyle   = this.color;
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.rotation * Math.PI / 180);
+        if (this.shape === "circle") { ctx.beginPath(); ctx.arc(0,0,this.size/2,0,Math.PI*2); ctx.fill(); }
+        else if (this.shape === "square") { ctx.fillRect(-this.size/2,-this.size/2,this.size,this.size); }
+        else if (this.shape === "rect") { ctx.fillRect(-this.size,-this.size/4,this.size*2,this.size/2); }
+        else { ctx.beginPath(); ctx.moveTo(0,-this.size/2); ctx.lineTo(this.size/2,this.size/2); ctx.lineTo(-this.size/2,this.size/2); ctx.closePath(); ctx.fill(); }
+        ctx.restore();
+      }
+      isDead() { return this.alpha <= 0 || (this.burst && this.y > canvas.height + 50); }
+    }
+
+    let particles = [];
+
+    function launchPageConfetti() {
+      for (let i = 0; i < 200; i++) {
+        setTimeout(() => particles.push(new Particle()), i * 15);
+      }
+    }
+
+    function burstConfetti(x, y, count) {
+      count = count || 80;
+      for (let i = 0; i < count; i++) particles.push(new Particle({x, y}));
+    }
+
+    function animLoop() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles = particles.filter(p => !p.isDead());
+      particles.forEach(p => { p.update(); p.draw(); });
+      requestAnimationFrame(animLoop);
+    }
+
+    launchPageConfetti();
+    animLoop();
+
+    // ── Video Modal ────────────────────────────────────────────────
+    function openVideo() {
+      const btn = document.getElementById("btn-video");
+      const r   = btn.getBoundingClientRect();
+      burstConfetti(r.left + r.width/2, r.top + r.height/2, 120);
+      document.getElementById("video-modal").classList.add("active");
+      const p = document.getElementById("video-player");
+      p.currentTime = 0; p.play();
+    }
+    function closeVideo() {
+      document.getElementById("video-modal").classList.remove("active");
+      document.getElementById("video-player").pause();
+    }
+    document.getElementById("video-modal").addEventListener("click", function(e) { if(e.target===this) closeVideo(); });
+
+    // ── Image Modal ────────────────────────────────────────────────
+    function openImage(src, caption) {
+      burstConfetti(window.innerWidth - 70, window.innerHeight / 2, 80);
+      document.getElementById("img-modal-src").src = src;
+      document.getElementById("img-modal-caption").textContent = caption;
+      document.getElementById("img-modal").classList.add("active");
+    }
+    function closeImage() {
+      document.getElementById("img-modal").classList.remove("active");
+      document.getElementById("img-modal-src").src = "";
+    }
+    document.getElementById("img-modal").addEventListener("click", function(e) { if(e.target===this) closeImage(); });
+
+    // ── Floating Emojis ────────────────────────────────────────────
+    const EMOJIS = ["🎂","🎉","🎊","🎈","🥳","✨","🎁","💖","⭐","🌟","💥","🎀"];
+    function spawnFloater() {
+      const el = document.createElement("div");
+      el.className = "floater";
+      el.textContent = EMOJIS[Math.floor(Math.random() * EMOJIS.length)];
+      el.style.left = Math.random() * 100 + "vw";
+      const dur = 6 + Math.random() * 8;
+      el.style.animationDuration = dur + "s";
+      el.style.fontSize = (1.2 + Math.random() * 2) + "rem";
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), dur * 1000);
+    }
+    setInterval(spawnFloater, 900);
+  </script>
+</body>
+</html>
